@@ -1,0 +1,176 @@
+\documentclass[a4paper, 12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[toc,page]{appendix}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{algpseudocode}
+\usepackage[english]{babel}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\leftmark}
+\fancyhead[RE,LO]{\thepage}
+\fancyfoot[LE,RO]{Federico Berto}
+\fancyfoot[RE,LO]{RL: a Preliminary Study on Vision-Based Control}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+\usepackage[bottom]{footmisc}
+
+\DeclareMathOperator*{\argmax}{argmax} %the * means we will place the _f(x) under the line
+\graphicspath{{images/}}
+\thinmuskip=3mu %this changes the spacing in all math equations
+
+
+\makeatletter
+\newcommand\ackname{Acknowledgements}
+\if@titlepage
+\newenvironment{acknowledgements}{%
+	\titlepage
+	\null\vfil
+	\@beginparpenalty\@lowpenalty
+	\begin{center}%
+		\bfseries \Large \ackname
+		\@endparpenalty\@M
+\end{center}}%
+{\par\vfil\null\endtitlepage}
+\else
+\newenvironment{acknowledgements}{%
+	\if@twocolumn
+	\section*{\abstractname}%
+	\else
+	\small
+	\begin{center}%
+		{\bfseries \Large \ackname\vspace{-.5em}\vspace{\z@}}%
+	\end{center}%
+	\quotation
+	\fi}
+{\if@twocolumn\else\endquotation\fi}
+\fi
+\makeatother
+
+
+\begin{document}
+	
+\title{Reinforcement Learning: a Preliminary Study on Vision-Based Control}
+\author{Federico Berto}
+%\maketitle%
+
+\input{chapters/TitlePage.tex}
+
+\pagenumbering{roman}
+
+
+
+%ENGLISH
+\begin{abstract}
+	The goals of this thesis are to provide the reader with a comprehensive introduction to the Reinforcement Learning research field, and demonstrating its capabilities in achieving a control system based on visual feedback.
+	\\
+	\indent More specifically, after introducing Reinforcement Learning as one of the three main Machine Learning branches, the basic theory and most important algorithms are presented. A concise introduction of Neural Networks is also provided because of their importance in approximating \textit{value functions}, in particular of Convolutional Neural Networks given their suitability in processing visual inputs.
+	\\
+	\indent After explaining the main Deep Reinforcement Learning algorithms, which are built on the use of function approximators, the experimental part of this thesis focuses on the implementation of Deep Q-Network algorithms along with Convolutional Neural Networks for  achieving vision-based control of a \textit{cart-and-pole} system; the results show its successful stabilization and prove Reinforcement Learning to be capable of gaining control of a physical system using only raw visual feedback.
+
+\end{abstract}
+
+%ITALIAN
+\begin{abstract}
+	Gli obiettivi di questa tesi sono innanzitutto di fornire al lettore una introduzione al campo di ricerca del Reinforcement Learning, inoltre di dimostrare le capacità di quest'ultimo nell'implementazione di un sistema di controllo basato su feedback visivo. 
+	\\
+	\indent In particolare, dopo aver introdotto il Reinforcement Learning come una delle tre branche principali del Machine Learning, sono presentati la teoria di base e gli algoritmi più importanti. Inoltre, viene fatta una introduzione concisa sulle Reti Neurali data la loro importanza nell'approssimare le \textit{value functions}, in particolare riguardo le Reti Neurali Convoluzionali viste le loro capacità nel processare input visivi.	
+	\\
+	\indent	In seguito ad una spiegazione dei principali algoritmi di Deep Reinforcement Learning, costruiti tramite l'uso degli approssimatori di funzione, la parte sperimentale di questa tesi si concentra sull'implementazione degli algoritmi di Deep Q-Network uniti alle Reti Neurali Convoluzionali al fine di sviluppare un sistema di controllo visivo di un sistema di \textit{pendolo inverso}; in conclusione, la stabilizzazione di quest'ultimo è ottenuta con successo e i risultati provano come il Reinforcement Learning sia in grado di ottenere il controllo di un sistema fisico utilizzando unicamente feedback visivo.
+\end{abstract}
+
+\clearpage
+
+
+\begin{acknowledgements}
+	Foremost, I would like to express my sincere gratitude to my advisor Prof. Claudio Melchiorri for giving me the opportunity to write this thesis and especially to PhD Riccardo Zanella, who provided me with this thesis topic and continuous support for successfully carrying out the experiments.
+	\\
+	\indent I would also like to thank my family: Dario, Paola and Sabrina for aiding me morally and financially in my studies and for helping me carrying out the experience abroad in China.
+	\\
+	\indent A special thanks to all of my friends whom I had fun with and who supported me, especially the ones who welcomed me back to Italy after one year abroad; I hope to keep in touch with all of them even if my path will lead thousand of kilometers from them. 
+	\\
+	\indent
+	I am also grateful to the Almatong project and my university colleagues, whom I shared study time with and a marvelous experience in China (and other countries) that will always have a spot in my hearth.
+	\\
+	\indent At last but not least, I would like to express my gratitude to my lovely girlfriend Benedetta, who did proof-reading of this thesis and has been the most incisive in these final months of university studies in Bologna; she always bore me in my ups and downs; she has always been at my side and I hope we will be together for a long time wherever future will lead us.
+\end{acknowledgements}
+
+\clearpage
+\thispagestyle{empty}
+\null\vfill
+
+\newlength\longest
+
+\settowidth\longest{\huge\itshape just as his inclination leads him;}
+
+\begin{center}
+	\parbox{\longest}{%
+	\raggedright{\Large\itshape%
+		The only stupid question is the one you were afraid to
+		ask but never did.
+\par\bigskip
+	}   
+	\raggedleft\large\MakeUppercase{Richard Sutton}\par%
+}
+
+\end{center}
+\vfill\vfill
+
+\clearpage
+
+\tableofcontents
+
+
+
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\input{chapters/introduction.tex}
+
+\chapter{The Reinforcement Learning problem}
+\input{chapters/chapterRL.tex}
+
+\chapter{Deep Neural Networks}
+\input{chapters/chapterDNN}
+
+\chapter{Deep Reinforcement Learning}
+\input{chapters/chapterDRL.tex}
+
+
+\chapter{Cart-Pole Balancing with Visual Input}
+\input{chapters/chapterCartpole.tex}
+
+\chapter{Conclusions and Future Work}
+\input{chapters/conclusion.tex}
+
+\appendix
+
+\chapter{Additional Reinforcement Learning Algorithms}
+\input{chapters/appendix1.tex}
+
+\chapter{Additional Deep Reinforcement Learning Algorithms}
+\input{chapters/appendix2.tex}
+
+
+\newpage
+
+
+\bibliographystyle{ieetr}
+\nocite{*}
+\bibliography{chapters/bibliography}
+
+
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,120 @@
+\label{appendixB}
+
+\section{Deep Deterministic Policy Gradient}
+\label{sec:DDPG}
+Deep Deterministic Policy Gradient (DDPG)\cite{lillicrap2015continuous} derives from the actor-critic framework discussed in Section \ref{sec:actorcritic} and it provides an improvement with respect to the DQN discussed above by making it tractable for continuous actions spaces. In DDPG, the actor is described by a neural network and the critic by another one. As the name suggests, the update rule for the value is the same one as for the Deterministic Policy Gradients in Equation \ref{eq:DPG}. This is also an off-policy algorithm.
+\\
+\indent In DQN, we have observed that directly updating networks by taking the temporal difference error could result in divergence sometimes. DDPG introduces a couple of improvements over traditional actor-critic in order to make learning suitable with neural networks: the first one, which was already used in DQN is the \textit{experience replay}, and the other one is the use of \textit{target networks}.Target networks are basically copies of the actor and critic networks: they are used to calculate the target $y$ for the temporal difference error. The target networks are updated very slowly to track the learned networks: learning the optimal Q-function becomes a supervised learning problem which stabilizes the algorithm greatly.
+\\
+\indent The update for the critic is given by the standard Q-learning update of Equation \ref{eq:gradientloss} by taking targets $y$ to be:
+
+\begin{equation}
+	\label{eq:criticupdate}
+	y = \mathbb{E}_{s'\sim\epsilon}[r + \gamma Q'(s', \mu'(s'; \theta^{\mu'})\theta^{Q'})]
+\end{equation}
+
+where $Q'(s, a; \theta^{Q'})$ and $ \mu'(s; \theta^{\mu'})$ refer to the target networks for the critic and the actor respectively with weights $\theta^{Q'}$ and $\theta^{\mu'}$.
+\\
+\indent The loss function is defined as:
+
+\begin{equation}
+	\label{eq:lossactorcritic}
+	L = \mathbb{E}_{s\sim\rho_\beta, a\sim\beta}\left(y-Q(s,a; \theta^Q)\right)^2
+\end{equation}
+
+where $Q(s, a; \theta^Q)$ refer to the critic network with weights $\theta^Q$ and $\beta$ is the behavior policy.
+\\
+\indent The policy is updated using the DPG theorem from Equation \ref{eq:DPG} given by:
+
+\begin{equation}
+	\label{eq:DPG_actorcritic_gradient}
+	\nabla_{theta^\mu}J = \mathbb{E}_{s_\sim\rho_\beta}[\nabla_aQ(s, a; \theta^Q)|_{s, a=\mu(s;\theta^\mu)}\nabla_{\theta^\mu}\mu(s; \theta^\mu)|s]
+\end{equation}
+
+where $\mu(s; \theta^\mu)$ refers to the actor with weights $\theta^\mu$.
+\\
+\indent The complete DDPG algorithm written in pseudo-code Algorithm \ref{alg:DDPG} is given below:
+
+\begin{algorithm}[h!]
+	\caption{Deep Deterministic Policy Gradient}
+	\label{alg:DDPG}
+	\SetAlgoLined
+	\DontPrintSemicolon
+	Initialize replay memory $\mathcal{D}$ \;
+	Initialize critic network $Q$ and actor network $\mu$ with random weights $\theta^Q$ and $\theta^\mu$ respectively \;
+	Initialize target networks $Q'$ and $\mu'$ with weights $\theta^{Q'} \leftarrow \theta^Q$, $\theta^{\mu'} \leftarrow \theta^\mu$
+	\Repeat{terminated}{
+		Observe initial state $s_1$\;
+		\For{t=1: T}{
+			Select an action $a_t = \mu(s_t; \theta^\mu) + \mathcal{N}$\;
+			Carry out action $a_t$\;
+			Observe reward $r_t$ and new state $s_{t+1}$\;
+			Store transition $(s_t, a_t, r_t, s_{t+1})$ in replay buffer $\mathcal{D}$\;
+			Sample random transitions from $\mathcal{D}$\;
+			Calculate target for each transition using \ref{eq:criticupdate}\;
+			Train the critic network using stochastic gradient descent by minimizing \ref{eq:lossactorcritic}\;
+			Update actor network using \ref{eq:DPG_actorcritic_gradient} \;
+			Update the target network using 
+			% MATCH SYNTAXXX!! LIKE s'
+			\begin{equation}
+				\begin{aligned}		
+				\theta^{Q'} \leftarrow \tau\theta^Q + (1-\tau)\theta^{Q'}
+			\\
+			\theta^{\mu'} \leftarrow \tau\theta^\mu + (1-\tau)\theta^{\mu'}
+				\end{aligned}
+			\end{equation}
+		}
+	}
+\end{algorithm}
+
+
+
+\section{Trust Region Policy Optimization}
+Trust Region Policy Optimization (TRPO)\cite{schulman2015trust} works by minimizing a certain objective function, ensuring monotonic improvements for the policy. It builds up on policy gradient methods addressing one of their most important issues: the bad choices made by the optimizer which usually does not work very well in curved areas, hence ruining the progress. An analogy for this problem can be found in learning how to follow a mountain path: if the agent were overconfident of its progress, then it could make a bad decision in following the steepest gradient ascent by making a line step directly down a cliff, ruining the progress and possibly damaging itself in a real-world scenario instead of following the path in a more cautious way. TRPO chooses a radius $\delta$ giving an area in which to look for the best value instead of naively following a line path for the gradient ascent: this is called the trust region. This way, we have a constrained optimization problem which can be stated as:
+
+
+\begin{equation}
+\label{eq:TRPO}
+	\begin{aligned}
+		\max_{\theta^\pi}\mathbb{E}_{s\sim\rho_{\pi(\cdot)}, a\sim\pi_{(\cdot;\theta^\pi_i)}} \left( \frac{\pi(a|s; \theta^\pi)}{\pi(a|s; \theta^\pi_i)}Q_\pi(s,a) \right) \\
+		\text{subject to $\mathbb{E}_{s \sim \rho_{\pi(\cdot)}}$} \big(D_{KL}		\pi(\cdot|s;\theta^\pi_i)||\pi(\cdot|s;\theta^\pi)\big) \leq  \delta 
+	\end{aligned}
+\end{equation}
+
+
+where $\pi(a|s; \theta^\pi_i)$ denotes the policy at iteration $i$ $\rho_{\pi(\cdot)}$ denotes the state visitation frequency under policy $\pi_{\theta^\pi_i}$ and $\delta$ is the step size which decides how much the new policy is allowed to deviate as compare to the old policy. $D_{KL}$ indicates instead the Kullback–Leibler divergence\footnote{The Kullback-Leibler divergence (which can be found in full form at \cite{hershey2007approximating}, is a measure of how a probability distribution differs from another. In other words, TRPO puts a limit to this difference bounding it in a "safety" radius $\delta$, the trust region. }.
+\\
+\indent TRPO has demonstrated robust performance in a wide variety of tasks such as walking, swimming and hopping gaits. The algorithm has a performance which is similar to the DQN algorithm (Section \ref{sec:DQN}) on the Atari games domain, hence making it one of the most robust and adaptable Deep RL algorithms.
+
+\section{Other Deep RL Algorithms}
+
+More advanced Deep Reinforcement Learning algorithms generally build up on the ones we have analyzed up to now and since RL is a continuously developing research subject, many new algorithms and improved variants are being developed as the time of writing. As we have seen with the DDPG and TRPO, the most challenging tasks,  are the high-dimensional ones. 
+
+\subsection{Generalized Advantage Estimation}
+Generalized Advantage Estimation (GAE)\cite{schulman2015high} builds on the TRPO and its aim is to solve the issue of the latter, which is requiring a large number of samples for policy improvement. Instead of using the Q-function in Equation \ref{eq:TRPO}, GAE uses an exponentially weighted estimate of the advantage function, which we are not going to discuss, for reducing estimates variance of policy gradients. 
+\\
+\indent The algorithm has proven able to solve highly challenging tasks such as 3D locomotion ones, which are high-dimensional in both states and actions spaces.
+
+\subsection{Guided Policy Search}
+Guided Policy Search (GPS)\cite{levine2013guided} implements a different approach with respect to the methods shown before. The method has been used to learn neural network policies for high dimensional tasks and has proven extremely sample efficient, which is critical for tasks involving real robots.
+\\
+\indent The main idea of GPS is to first do a trajectory optimization for the given task and learn an optimal distribution over trajectories: after that, the samples from our optimal distribution are used to train via supervised learning a neural network policy. In other words, we are using a demonstration of the optimal policy and then using that to bootstrap and speed-up the learning process making it more sample efficient.
+\\
+\indent In the trajectory optimization stage we are using a full knowledge of the system: thus, this is a form of \textit{instrumented training}. Other than using demonstration, for instance by a human, for reducing the sample complexity we can further improve the sample efficiency by pre-training the neural network to predict certain elements of the state space which are not observable. GPS is able to speed learning up by actually having a teacher: it builds up on the idea that, having someone or something to learn a task from, will make the learning process easier and faster as it happens in the real world with animals and human beings.
+
+\section{Deep RL Algorithms Comparison}
+
+We will now compare the DRL algorithms shown in the sections above based on 4 different criteria:
+
+\begin{itemize}
+	
+	\item Ability to learn from off policy data: this criterion is important because it allows the agent to learn from previous experience which can first be collected and used after. Both DQN and DDPG can learn from off-policy data since they use a replay buffer. Policy gradient methods and GPS, on the other hand, require on-policy data to train the network.
+	
+	\item Robustness: TRPO and the model-based TRPO-GAE and GPS are more robust since their policy optimization procedure guarantees a monotonic improvement.
+	
+	\item Sample Efficiency: GPS is the most sample efficient, being a model-based algorithm which utilizes trajectory optimization along with neural network training.
+	
+	\item Scalability: All of the DRL methods, apart from DQN, have shown that they can be applied on continuous high dimensional tasks.
+
+	
+\end{itemize}

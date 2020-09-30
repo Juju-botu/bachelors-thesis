@@ -1,0 +1,84 @@
+\label{appendixA}
+
+\section{Model-Free Methods}
+In this section we will explore more advanced model-free methods and concepts which may be useful for the reader in order to develop more advanced implementations of Reinforcement Learning. 
+
+\subsection{TD($\lambda$)}
+It is clear that one of the most important differences between the Monte Carlo methods and TD ones is that, while the former use a total reward for value function update, the latter use rewards at the current step. A way to combine both approaches would be to use the returns obtained after every certain number of steps, instead of taking the total returns after each episode, and then calculating a weighted average of them: this is the main idea behind the TD($\lambda$) algorithm.
+\\
+\indent The "$\lambda$" stands indeed for an additional variable associated to each state, known as \textit{eligibility trace} $e_t(s) \in \mathbb{R}^+$. The eligibility trace indicates how much learning should be assigned to each state at every time step, depending on the frequency and recency of the visit for each state. Eligibility traces are updated at each time step using the following rule: 
+
+\begin{equation}
+e_t(s) = \begin{cases}
+\gamma\lambda e_{t-1}(s), & \text{if $s \neq s_t$} 
+\\
+\gamma\lambda e_{t-1}(s) +1, & \text{if $s = s_t$} 
+\end{cases}
+\end{equation}
+
+where $\lambda$ is known as the \textit{trace-decay parameter}. This is referred to as the \textit{accumulating} form of the eligibility trace, because every time a given state is encountered the trace is incremented by one; the more a situation occurs over time, the more it is kept track of with this method.
+\\
+\indent The value function is then updated, for instance using SARSA or Q-Learning update, weighted by eligibility traces. The Q-Learning algorithm we have analyzed before actually employs a particular version of the TD($\lambda$) algorithm, which is the TD(0): by fixing $\lambda = 0$, only the latest state encountered counts for the value function update. If $\lambda = 1$, the result is practically the same as in Monte Carlo updates. By properly choosing a value of $\lambda$ between 0 and 1, we can give the algorithm positive features from both Temporal Difference Learning and Monte Carlo.
+
+\subsection{Policy Search Methods}
+
+Policy search methods are a class of RL algorithms using parametrized policies $\pi_{\theta^\pi}$, with $\theta^\pi$ being the parameter vector. These methods search in the parameter space $\Theta$, a $\theta^\pi \in \Theta$ for an optimal policy. Policy evaluation occurs by performing rollouts from the current policy and calculating the total reward. Then, parameters are updated using gradient ascent in the direction of increasing expected return, hence improving the policy by making the total rewards increase. The update rule for the parameters of the policy can be expressed in terms of J, the expected return, as:
+
+\begin{equation}
+	\theta_{t+1}^\pi = \theta_t^\pi + \alpha \nabla_{\theta^\pi}
+\end{equation}
+
+where,
+
+\begin{equation}
+	J = \mathbb{E}_\pi (\sum_{k=0}^{\infty}\gamma^kr_k)
+\end{equation}
+
+As for how the gradient is defined and evaluated, there is a wide variety of policy search approaches we are not going to discuss into detail here.
+\\
+\indent In contrast with value based approaches, policy search ones have better convergence properties and can also learn stochastic policies . However, the major drawback of these algorithms is their policy evaluation step, suffering from great variance and thus making learning slow. This means that a large number of interactions is needed, making it undesirable for tasks involving real world robots. Methods to overcome these challenges include pre-structured policies, such as motor primitives, %(CITATION NEEDED)
+and additional information for bootstrapping policy parameters, such as human demonstration, thus leading to faster convergence.
+
+\subsection{Actor Critic Methods}
+\label{sec:actorcritic}
+
+Actor critic methods\cite{konda2000actor} are TD methods which store the policy explicitly. Since the policy chooses actions in a given state, it is known as the \textit{actor}, while the value function acts as the \textit{critic} constantly evaluating the policy based on the temporal difference error. The policy itself is updated based on the critic. 
+\\
+\indent Policy updates are similar to policy search methods, except that the critic decides the direction of gradient ascent instead of the expected return: this helps reducing the variance for these types of algorithms. The stochastic policy gradient theorem defines J, the gradient of the expected return, as:
+
+
+%NEW LINE FOR EQUATION + TILDES
+
+\begin{align}
+	\begin{split}
+		\nabla_{\theta^\pi}J &= \int_{\textbf{S}}\rho_\pi(s) \int_{\textbf{A}} \nabla_{\theta^\pi} \pi (a|s; \theta^\pi)Q(s, a; \theta_Q)dads \\
+		&	= \mathbb{E}_{s\sim\rho_\pi, a\sim\pi(a|s; \theta^\pi)} [\nabla_{\theta^\pi} \pi(a|s; \theta^\pi)Q(s,a; \theta^Q)]
+	\end{split} 
+\end{align}
+
+where $\rho_\pi(s)$ is the state distribution under policy $\pi$, $\theta^\pi$ is the parameter vector for the policy $\pi$ and $\theta^Q$ is the parameter vector for Q-function. The parameters of the value function, $Q(s, a; \theta^Q)$, are updated using temporal difference learning. These algorithms are known as \textit{stochastic actor critic algorithms}.
+
+\subsection{Deterministic Policy Gradient}
+ A deterministic counterpart to the stochastic actor critic methods, known as \textit{Deterministic Policy Gradient (DPG)} has been introduced in literature for the expected return $J$ when subject to a deterministic policy. In this case, the gradient for the expected return can be written as:
+
+\begin{align}
+\label{eq:DPG}
+	\begin{split}
+		\nabla_{\theta^\pi}J &= \int_{\textbf{S}}\rho_\pi(s) \nabla_{\theta^\pi} \pi (s; \theta^\pi) \nabla_a Q(s, a; \theta_Q)|_{a=\pi(s, \theta^\pi)}ds \\
+		 &= \mathbb{E}_{s\sim\rho_\pi} [\nabla_{\theta^\pi} \pi(s; \theta^\pi)\nabla_a Q(s,a; \theta^Q)|_{a=\pi(s, \theta^\pi)}] 	 
+	\end{split}
+\end{align}
+
+ Since there is a continuous feedback loop of the actor and critic, actor critic methods are mostly on-policy. However, off-line counterparts have been introduced in literature.
+\\
+\indent Actor critic methods provide better convergence properties than the previous TD ones, and they also make action computation easier, especially for continuous tasks. Besides, they can also learn stochastic policies. However, since tabular methods are not implementable for high dimensionality state and action spaces, we are required to implement a further piece using function approximators, such as neural networks, for obtaining satisfactory real life results.
+
+\section{Model-based Methods}
+
+All the approaches we have discussed up to now do not possess any previous knowledge of the environment, thus they are called \textit{model-free methods}. Model-based methods try to utilize some information about the environment in order to speed-up the learning process.
+\\
+\indent There are basically two approaches in model-based learning: one is to build a model of the environment from first principles and then use it to learn the policy or value function. The other approach is to learn a model of the environment by experimenting on it. The problem with the former approach is that, if the model is not that accurate, then the learned policy will likely be sub-optimal, or even fail in learning anything at all. Therefore, most successful model-based approaches actually try learning a model and using that to speed up learning.	
+\\
+\indent A variety of forward models %INSERT LITERATURE
+have been proposed in literature for planning: locally linear models, Gaussian Process models, DNN and so on. However, since the purpose of this thesis is to provide a preliminary study on RL and it is going to focus more on model-free methods, we are not going to deep-dive into model based ones, although we have provided a general idea for the sake of clarity.
+

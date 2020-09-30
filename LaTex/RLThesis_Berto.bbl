@@ -1,0 +1,136 @@
+\begin{thebibliography}{10}
+
+\bibitem{bertsekas1995dynamic}
+D.~P. Bertsekas, D.~P. Bertsekas, D.~P. Bertsekas, and D.~P. Bertsekas, {\em
+  Dynamic programming and optimal control}, vol.~1.
+\newblock Athena scientific Belmont, MA, 1995.
+
+\bibitem{metropolis1949monte}
+N.~Metropolis and S.~Ulam, ``The monte carlo method,'' {\em Journal of the
+  American statistical association}, vol.~44, no.~247, pp.~335--341, 1949.
+
+\bibitem{watkins1992q}
+C.~J. Watkins and P.~Dayan, ``Q-learning,'' {\em Machine learning}, vol.~8,
+  no.~3-4, pp.~279--292, 1992.
+
+\bibitem{silver2017mastering}
+D.~Silver, J.~Schrittwieser, K.~Simonyan, I.~Antonoglou, A.~Huang, A.~Guez,
+  T.~Hubert, L.~Baker, M.~Lai, A.~Bolton, {\em et~al.}, ``Mastering the game of
+  go without human knowledge,'' {\em Nature}, vol.~550, no.~7676, p.~354, 2017.
+
+\bibitem{nair2010rectified}
+V.~Nair and G.~E. Hinton, ``Rectified linear units improve restricted boltzmann
+  machines,'' in {\em Proceedings of the 27th international conference on
+  machine learning (ICML-10)}, pp.~807--814, 2010.
+
+\bibitem{kingma2014adam}
+D.~P. Kingma and J.~Ba, ``Adam: A method for stochastic optimization,'' {\em
+  arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem{srivastava2014dropout}
+N.~Srivastava, G.~Hinton, A.~Krizhevsky, I.~Sutskever, and R.~Salakhutdinov,
+  ``Dropout: a simple way to prevent neural networks from overfitting,'' {\em
+  The journal of machine learning research}, vol.~15, no.~1, pp.~1929--1958,
+  2014.
+
+\bibitem{mnih2013playing}
+V.~Mnih, K.~Kavukcuoglu, D.~Silver, A.~Graves, I.~Antonoglou, D.~Wierstra, and
+  M.~Riedmiller, ``Playing atari with deep reinforcement learning,'' {\em arXiv
+  preprint arXiv:1312.5602}, 2013.
+
+\bibitem{schaul2015prioritized}
+T.~Schaul, J.~Quan, I.~Antonoglou, and D.~Silver, ``Prioritized experience
+  replay,'' {\em arXiv preprint arXiv:1511.05952}, 2015.
+
+\bibitem{konda2000actor}
+V.~R. Konda and J.~N. Tsitsiklis, ``Actor-critic algorithms,'' in {\em Advances
+  in neural information processing systems}, pp.~1008--1014, 2000.
+
+\bibitem{lillicrap2015continuous}
+T.~P. Lillicrap, J.~J. Hunt, A.~Pritzel, N.~Heess, T.~Erez, Y.~Tassa,
+  D.~Silver, and D.~Wierstra, ``Continuous control with deep reinforcement
+  learning,'' {\em arXiv preprint arXiv:1509.02971}, 2015.
+
+\bibitem{schulman2015trust}
+J.~Schulman, S.~Levine, P.~Abbeel, M.~Jordan, and P.~Moritz, ``Trust region
+  policy optimization,'' in {\em International conference on machine learning},
+  pp.~1889--1897, 2015.
+
+\bibitem{hershey2007approximating}
+J.~R. Hershey and P.~A. Olsen, ``Approximating the kullback leibler divergence
+  between gaussian mixture models,'' in {\em 2007 IEEE International Conference
+  on Acoustics, Speech and Signal Processing-ICASSP'07}, vol.~4, pp.~IV--317,
+  IEEE, 2007.
+
+\bibitem{schulman2015high}
+J.~Schulman, P.~Moritz, S.~Levine, M.~Jordan, and P.~Abbeel, ``High-dimensional
+  continuous control using generalized advantage estimation,'' {\em arXiv
+  preprint arXiv:1506.02438}, 2015.
+
+\bibitem{levine2013guided}
+S.~Levine and V.~Koltun, ``Guided policy search,'' in {\em International
+  Conference on Machine Learning}, pp.~1--9, 2013.
+
+\bibitem{sutton1998introduction}
+R.~S. Sutton, A.~G. Barto, {\em et~al.}, {\em Introduction to reinforcement
+  learning}, vol.~2.
+\newblock MIT press Cambridge, 1998.
+
+\bibitem{goodfellow2016deep}
+I.~Goodfellow, Y.~Bengio, and A.~Courville, {\em Deep learning}.
+\newblock MIT press, 2016.
+
+\bibitem{barto1994reinforcement}
+A.~G. Barto, ``Reinforcement learning control,'' {\em Current opinion in
+  neurobiology}, vol.~4, no.~6, pp.~888--893, 1994.
+
+\bibitem{vemulavision}
+A.~Vemula and D.~Dwibedi, ``Vision-based deep reinforcement learning,'' 2016.
+
+\bibitem{rastogi2017deep}
+D.~Rastogi, ``Deep reinforcement learning for bipedal robots,'' 2017.
+
+\bibitem{lample2017playing}
+G.~Lample and D.~S. Chaplot, ``Playing fps games with deep reinforcement
+  learning,'' in {\em Thirty-First AAAI Conference on Artificial Intelligence},
+  2017.
+
+\bibitem{appiahplaying}
+N.~Appiah and S.~Vare, ``Playing flappybird with deep reinforcement learning,''
+
+\bibitem{arulkumaran2017deep}
+K.~Arulkumaran, M.~P. Deisenroth, M.~Brundage, and A.~A. Bharath, ``Deep
+  reinforcement learning: A brief survey,'' {\em IEEE Signal Processing
+  Magazine}, vol.~34, no.~6, pp.~26--38, 2017.
+
+\bibitem{quillen2018deep}
+D.~Quillen, E.~Jang, O.~Nachum, C.~Finn, J.~Ibarz, and S.~Levine, ``Deep
+  reinforcement learning for vision-based robotic grasping: A simulated
+  comparative evaluation of off-policy methods,'' in {\em 2018 IEEE
+  International Conference on Robotics and Automation (ICRA)}, pp.~6284--6291,
+  IEEE, 2018.
+
+\bibitem{nichols2014reinforcement}
+B.~D. Nichols, {\em Reinforcement learning in continuous state-and
+  action-space}.
+\newblock PhD thesis, University of Westminster, 2014.
+
+\bibitem{zhang2015towards}
+F.~Zhang, J.~Leitner, M.~Milford, B.~Upcroft, and P.~Corke, ``Towards
+  vision-based deep reinforcement learning for robotic motion control,'' {\em
+  arXiv preprint arXiv:1511.03791}, 2015.
+
+\bibitem{chen2018comparing}
+S.~Chen, ``Comparing deep reinforcement learning methods for engineering
+  applications,'' 2018.
+
+\bibitem{gu2016continuous}
+S.~Gu, T.~Lillicrap, I.~Sutskever, and S.~Levine, ``Continuous deep q-learning
+  with model-based acceleration,'' in {\em International Conference on Machine
+  Learning}, pp.~2829--2838, 2016.
+
+\bibitem{hochlander2014deep}
+A.~Hochl{\"a}nder, {\em Deep Learning for Reinforcement Learning in Pacman}.
+\newblock PhD thesis, 2014.
+
+\end{thebibliography}

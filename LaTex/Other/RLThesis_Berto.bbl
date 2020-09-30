@@ -1,0 +1,25 @@
+\begin{thebibliography}{}
+
+\bibitem [\protect \citeauthoryear {%
+Doe%
+}{%
+Doe%
+}{%
+{\protect \APACyear {2100}}%
+}]{%
+DUMMY:1}
+\APACinsertmetastar {%
+DUMMY:1}%
+\begin{APACrefauthors}%
+Doe, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2100}.
+\newblock
+\APACrefbtitle {The Book without Title} {The book without title}.
+\newblock
+\APACaddressPublisher{}{Dummy Publisher}.
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

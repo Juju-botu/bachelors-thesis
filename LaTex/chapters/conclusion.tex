@@ -1,0 +1,29 @@
+\label{ch:conclusion}
+
+In this final chapter we summarize our research and experimental implementations and also give some ideas for possible improvements and further work.
+
+\section{Thesis Summary}
+
+The goals of this thesis were to provide the reader with a useful introduction to the Reinforcement Learning research field and to demonstrate the abilities of Deep Reinforcement Learning in achieving vision-based control.
+\\
+\indent We briefly presented the main three branches of Machine Learning among which Reinforcement Learning is. After that, we have presented the bases of the theory behind RL which is nowadays a very lively research field and is very attractive because of its possible implementations in not only control theory but also in many other fields.
+\\
+\indent We explained the main concepts of SARSA, Q-Learning, the Actor-Critic Methods and the Deterministic Policy Gradients and gave a brief introduction of model-based ones. The main problem of these methods was that they would require a huge amount of memory since they store value functions in a tabular form, hence function approximators are used for such tasks.
+\\
+\indent The most robust and used function approximators are nowadays Neural Networks. NNs are able to approximate functions by means of storing information in weights; these are able to create a network which is updated to approximate in the best way possible a function relating inputs to outputs. A particular implementation is the Convolutional Neural Network, which is the base of vision-based function approximation.
+\\
+\indent Deep Reinforcement Learning, whose most notable algorithms which are presented are DQN, DDPG and TRPO, combines classical RL algorithms with the power of Neural Networks making otherwise impossible tasks solvable. DRL has made huge progress in recent years, proving that it is possible to train agents dealing with highly challenging tasks.
+\\
+\indent The experimental part is made to demonstrate the power of DQN in stabilizing one of the benchmarks of DRL algorithms, the CartPole. We made a further step in developing an implementation able to achieve vision-based control of the system, a much more challenging task compared to the classical problem. After many unsuccessful experiments, we were able to solve the problem making the algorithm fail, mainly due to image pre-processing, overfitting and reward function design. We designed a Convolutional Neural Network for approximating image frames to their values and implemented DQN: the final results were very satisfactory in showing the CartPole stabilization and beating the OpenAI's challenge.
+
+\section{Future Work}
+
+In this section some further advice for possible future work is given to the reader.
+\\
+\indent Fist of all, the Deep Reinforcement Learning research field is very active and each year a number of research papers are released, some of them containing new algorithms and methods for solving a wide variety of tasks. Up to now, no DRL method can be said to be perfect since some methods which excel in a task may not be able to solve another one and vice-versa; thus, fresh research of the new and most recent evolution of this ever-changing research field should be done.
+\\
+\indent As regards the experimental part, the vision-based CartPole algorithm can be further improved. For example, an improvement may be making it able to beat the \textit{"CartPole\_v1"} version of OpenAI Gym which raises the win threshold to 500, hence making the algorithm more stable. Moreover, DQN itself may not be the perfect choice for the CartPole: for instance, TRPO has proven a much more robust though complex algorithm in a wide variety of tasks.
+\\
+\indent Besides the main thesis body, Appendix \ref{appendixA} and Appendix \ref{appendixB} are provided to the reader for a more comprehensive introduction to RL. The former explores further Reinforcement Learning algorithms while the latter explains and evaluates the main state-of-the-art advances in Deep RL as of the time of writing (2019).
+\\
+\indent Another advice for the reader is also that interesting implementations include more sophisticated and complex environments such as the Atari Arcade platforms or the 3D simulation MuJoCo environment. An even more appealing goal would also be being able to implement Reinforcement Learning on a real world task which is indeed the ultimate goal of RL: enabling machines to learn and make decisions in our world.

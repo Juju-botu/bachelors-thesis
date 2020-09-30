@@ -1,0 +1,65 @@
+\label{ch:deeprl}
+
+\section{Introduction}
+As we have seen in Deep Neural Networks (Chapter \ref{ch:DNN}), a major improvement for the efficiency of RL algorithms is the introduction of function approximators which are able to generalize functions using much less data than a tabular method would require. A function approximator approximates a generic function $f(x)$ to a $f'(x;\theta) \approx f(x)$, where $\theta$ are the weights of the neural network.
+
+% THETA OR w FOR WEIGHT?? DECIDE
+
+\section{Deep Q-Learning}
+
+\label{sec:DQN}
+Q-Learning (Section \ref{sec:qlearning}) has been a widely used algorithm for model-free reinforcement learning. Although this method is relatively simple and it seemingly can not handle high-dimensionality problems, it was shown in the Atari 2600 paper\cite{mnih2013playing} that the implementation of Q-Learning along with Deep Neural Networks, called \textit{Deep Q-Learning (DQN)}, can indeed handle problems with a very high state dimensionality. The DQN algorithm was able to show human level performance on seven Atari 2600 games using only raw image pixels as input. Given the importance of the aforementioned paper in the Deep Reinforcement Learning field, we will use the same notation here.
+\\
+\indent The non-linear function approximator, in this case neural network, will have the task of estimating the action-value function, $Q(s,a; \theta) \approx Q*(s,a)$. For our purposes, $\theta$ will denote the set of weights of the network, which we will refer to as Q-network. A Q-network can be trained by minimizing a sequence of loss functions $L_i(\theta_i)$ changing at each iteration i,
+
+\begin{equation}
+	L_i(\theta_i) = \mathbb{E}_{s,a \sim \rho(\cdot)}[\left(y_i - Q(s,a;\theta_i)\right)^2],
+	\label{eq:lossfunction}
+\end{equation}
+
+where $y_i = \mathbb{E}_{s' \sim \mathcal{E}} [r + \gamma \max_{a'}Q(s', \theta_{i-1}) | s,a]$ is the target for iteration $i$, $\rho(s,a)$ is a probability distribution over sequences $s$ and actions $a$ that we refer to as the \textit{behavior distribution}, and $\mathcal{E}$ refers to the environment. The parameters from the previous iteration $\theta_{i-1}$ are kept fixed when optimizing the loss function $L_i(\theta_i)$. The targets depend on the network weights: for this reason, it differs from classical weights used in supervised learning, which are fixed before learning itself begins. 
+\\
+\indent Since we want to minimize the loss function for obtaining a better fit of the networks with respect to the real action value function, we want to compute the gradient with respect to the weights:
+
+\begin{equation}
+	\nabla_{\theta_i}L_i (\theta_i) = \mathbb{E}_{s,a \sim \rho(\cdot); s' \sim \mathcal(E)} [(r + \gamma \max_{a'} Q (s', a'; \theta_{i-1}) -  Q(s,a; \theta_i)) \nabla_{\theta_i} Q(s,a; \theta_i)]
+	\label{eq:gradientloss}
+\end{equation}
+
+The loss function is then minimized as explained in Section \ref{subsec:traininnet} by either using stochastic gradient descent or more sophisticated methods like ADAM. The behavior policy is $\epsilon$-greedy for ensuring sufficient exploration.
+\\
+\indent What makes the algorithm work is a technique known as \textit{experience replay}\cite{schaul2015prioritized}, by which we store the agent's experiences (also referred to as transitions) at each time-step, $e_t = (s_t, a_t, r_t, s_{t+1})$, in a data set $ \mathcal{D} = (e_1, ..., e_N)$, pooled over many episodes into a \textit{replay memory}. In the inner loop of our algorithm we apply Q-Learning updates, or mini-batch updates, to samples of experience, $e \sim \mathcal{D}$, picked up randomly from the pool of stored samples. After performing experience replay, the agent executes an action according to an $\epsilon$-greedy policy. Deep Q-Learning with experience replay is written in pseudo-code in Algorithm \ref{alg:DQN}.
+\begin{algorithm}[h]
+	\caption{Deep Q-Learning with Experience Replay}
+	\label{alg:DQN}
+	\SetAlgoLined
+	\DontPrintSemicolon
+	Initialize replay memory $\mathcal{D}$ \;
+	Initialize action value function Q with random weights \;
+	\Repeat{terminated}{
+		Observe initial state $s_1$\;
+		\For{t=1: T}{
+			Select an action $a_1$ using policy derived from Q (e.g. $\epsilon$-greedy)\;
+			Carry out action $a_t$\;
+			Observe reward $r_t$ and new state $s_{t+1}$\;
+			Store transition $(s_t, a_t, r_t, s_{t+1})$ in replay buffer $\mathcal{D}$\;
+			Sample random transitions $(s_j, a_j, r_j, s_{j+1})$ from $\mathcal{D}$\;
+			Calculate target for each transition \;
+			% MATCH SYNTAXXX!! LIKE s'
+			
+			\begin{equation}
+			\text{Set } y_i = \begin{cases}
+			r_j & \text{if } s_{j+1} \text{ is terminal}\\
+			r_j + \gamma \max_{a'} Q(s_{j+1},a';\theta) & \text{if } s_{j+1} \text{ is non-terminal}			
+			\end{cases}
+			\end{equation}
+			
+			Train the Q network on $(y_j - Q(s_j, a_j; \theta))^2$ using Equation \ref{eq:gradientloss}
+		}
+	}
+\end{algorithm}
+\\
+\indent Deep Q-Learning has several advantages by using experience replay. Firstly, since each step of experience is potentially used in many weight updates, we have a greater data efficiency. Secondly, randomizing the samples allows for improved efficiency and reduces the updates variance, given that learning directly from consecutive samples of experience is inefficient due to the strong correlations between the samples. Thirdly, by learning off-policy we may be able to avoid dangerous unwanted feedback loops. For example, if we did train on-policy, if the maximizing action were to move on the left then the training samples would be dominated by samples from the left-hand side; if the maximizing action were the opposite one on the right, the same would happen with the right-hand side samples. This behavior could lead to unwanted outcomes, like getting stuck in a poor local minimum, or even catastrophically diverge. Thus, by using the off-policy experience replay we are able to smooth out learning and to avoid oscillation or divergence in the parameters.
+
+\subsection{DQN shortcomings}
+Even if the algorithm demonstrated robustness in the Atari 2600 games, there are a few issues it is not able to solve. The algorithm only stores the last $N$ experience tuples in the replay memory, and samples uniformly at random from $\mathcal{D}$ when performing updates. Firstly, the approach is in some respects limited since the memory buffer treats all transitions equally and does not address important ones; secondly, due to the finite memory size $N$, the algorithm always overwrites with the most recent transitions. Moreover, the uniform sampling gives equal importance to all transitions in the replay memory; as stated in the Atari 2600 paper\cite{mnih2013playing}, a more sophisticated strategy might address these problems, for example by prioritizing important transitions.

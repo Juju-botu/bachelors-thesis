@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: RLThesis_Berto.aux
+The style file: ieeetr.bst
+Database file #1: chapters/bibliography.bib
+Warning--can't use both volume and number fields in bertsekas1995dynamic
+Warning--can't use both volume and number fields in sutton1998introduction
+Warning--empty journal in vemulavision
+Warning--empty journal in rastogi2017deep
+Warning--empty journal in appiahplaying
+Warning--empty year in appiahplaying
+Warning--empty journal in chen2018comparing
+Warning--empty school in hochlander2014deep
+You've used 29 entries,
+            1876 wiz_defined-function locations,
+            629 strings with 8351 characters,
+and the built_in function-call counts, 7359 in all, are:
+= -- 674
+> -- 350
+< -- 0
++ -- 128
+- -- 99
+* -- 522
+:= -- 1072
+add.period$ -- 33
+call.type$ -- 29
+change.case$ -- 24
+chr.to.int$ -- 0
+cite$ -- 37
+duplicate$ -- 390
+empty$ -- 711
+format.name$ -- 99
+if$ -- 1756
+int.to.chr$ -- 0
+int.to.str$ -- 29
+missing$ -- 30
+newline$ -- 95
+num.names$ -- 29
+pop$ -- 129
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 220
+stack$ -- 0
+substring$ -- 401
+swap$ -- 131
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 8
+while$ -- 66
+width$ -- 31
+write$ -- 265
+(There were 8 warnings)
