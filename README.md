@@ -2,7 +2,7 @@
 Bachelor's degree thesis in Automation Engineering at the University of Bologna titled: Reinforcement Learning: a Preliminary Study on Vision-Based Control
 
 <p align="center">
-  <img source="https://i.imgur.com/teg78lK.png">
+  <img src="https://i.imgur.com/teg78lK.png">
 </p>
 
 Final grade: 110L/110 (110 cum laude)
