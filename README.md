@@ -1,2 +1,4 @@
-# italian-bachelor-thesis
-Italian bachelor's degree thesis in Automation Engineering titled: Reinforcement Learning: a Preliminary Study on Vision-Based Control
+# Bachelor's Degree Thesis
+Bachelor's degree thesis in Automation Engineering at the University of Bologna titled: Reinforcement Learning: a Preliminary Study on Vision-Based Control
+Final grade: 110L/110 (110 cum laude)
+
